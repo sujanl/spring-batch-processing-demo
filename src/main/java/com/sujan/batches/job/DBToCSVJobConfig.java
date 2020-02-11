@@ -53,7 +53,7 @@ public class DBToCSVJobConfig {
     @Bean
     public Step dbToCsvStep() throws Exception {
         return stepBuilderFactory.get("DBToCSV-Step")
-                .<Employee, EmployeeDto>chunk(5)
+                .<Employee, EmployeeDto>chunk(50)
                 .reader(employeeDBReader())
                 .processor(employeeToEmployeeDtoProcessor)
                 .writer(employeeCSVWriter())
@@ -80,7 +80,6 @@ public class DBToCSVJobConfig {
         reader.setDataSource(dataSource);
         reader.setSql("select * from employee");
         reader.setRowMapper(new EmployeeDBRowMapper());
-//      reader.setRowMapper(new BeanPropertyRowMapper<>(EmployeeDto.class));
         return reader;
     }
 }

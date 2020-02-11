@@ -50,7 +50,7 @@ public class CSVToDBJobConfig {
     @Bean
     public Step csvToDbStep() throws Exception {
         return this.stepBuilderFactory.get("CSVToDB-step")
-                .<EmployeeDto, Employee>chunk(5)
+                .<EmployeeDto, Employee>chunk(50)
                 .reader(employeeReader())
                 .processor(employeeDtoToEmployeeProcessor)
                 .writer(employeeDBWriter)

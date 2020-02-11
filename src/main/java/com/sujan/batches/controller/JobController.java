@@ -47,24 +47,17 @@ public class JobController {
         return this.executeJob(dbToCsvJob);
     }
 
-    private String executeJob(Job dbToCsvJob) throws
+    private String executeJob(Job job) throws
             JobParametersInvalidException,
             JobExecutionAlreadyRunningException,
             JobRestartException,
             JobInstanceAlreadyCompleteException {
+        System.out.println("Batch is Running...");
+
         Map<String, JobParameter> maps = new HashMap<>();
         maps.put("time", new JobParameter(System.currentTimeMillis()));
         JobParameters parameters = new JobParameters(maps);
-        JobExecution jobExecution = jobLauncher.run(dbToCsvJob, parameters);
-
-        System.out.println("JobExecution: " + jobExecution.getStatus());
-
-        System.out.println("Batch is Running...");
-        while (jobExecution.isRunning()) {
-            System.out.println("...");
-        }
-
-//        return jobExecution.getStatus();
+        JobExecution jobExecution = jobLauncher.run(job, parameters);
         return String.format("Job "+jobExecution.getJobInstance()+" submitted successfully."+jobExecution.getStatus().toString());
     }
 }

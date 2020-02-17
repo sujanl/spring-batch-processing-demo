@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 
 import javax.sql.DataSource;
 
@@ -57,7 +59,14 @@ public class DBToCSVJobConfig {
                 .reader(employeeDBReader())
                 .processor(employeeToEmployeeDtoProcessor)
                 .writer(employeeCSVWriter())
+//                .taskExecutor(getTaskExecutor())
                 .build();
+    }
+
+    private TaskExecutor getTaskExecutor() {
+        SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
+        simpleAsyncTaskExecutor.setConcurrencyLimit(5);
+        return simpleAsyncTaskExecutor;
     }
 
     @Bean
